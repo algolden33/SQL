@@ -1,0 +1,58 @@
+--For this project I imported a CSV file from Kaggle with the following columns:
+
+Artist: Name of the artist or group who performed or created the music. 
+Title: Title of the track or album. 
+Label: Record label that released the music. 
+Country: The country where the music was released. 
+Format: The format of the release. 
+Release Date: The date when the music was released. 
+Genre: The general genre of the music. 
+Styles: Specific styles or sub-genres. 
+Have/Want: Metrics indicating how many people own or want the record. 
+Number of Ratings: The total number of ratings the record has received. 
+Average Rating: The average rating out of all received ratings. 
+Price Statistics: This includes the lowest, median, and highest prices of the records.
+
+--Get a fee for the data
+SELECT *
+FROM Discogs
+Limit 5;
+
+-Added a new column for release year because the release_date column had the dates in muultiple formats
+UPDATE Discogs
+SET release_year = CASE
+    WHEN LENGTH(release_date) = 4 THEN CAST(release_date AS INTEGER)
+    ELSE CAST(SUBSTR(release_date, 1, 4) AS INTEGER)
+END;
+
+
+--What were the top 5 house songs with highest average rating in 1995?
+
+SELECT title, artist, release_year, num_ratings, average_rating, styles
+FROM Discogs
+Where styles LIKE "%House%"
+AND release_year = 1995
+AND average_rating IS NOT NULL
+AND average_rating REGEXP '^[0-9]+(\.[0-9]+)?$'
+ORDER BY CAST(average_rating AS REAL) DESC
+Limit 5;
+
+--Most expensive record based on median price?
+SELECT title, artist, median_price, num_ratings
+FROM Discogs
+WHERE median_price IS NOT NULL
+AND median_price REGEXP '^[0-9]+(\.[0-9]+)?$'
+AND num_ratings > 0
+ORDER BY CAST(median_price AS REAL) DESC
+Limit 1;
+
+--What are the 10 most popular House records based on average rating?
+SELECT title, artist, release_date, average_rating, num_ratings, styles
+FROM Discogs
+WHERE styles like "%House%"
+AND average_rating IS NOT NULL
+AND average_rating REGEXP '^[0-9]+(\.[0-9]+)?$'
+ORDER BY average_rating desc
+LIMIT 10;
+
+
