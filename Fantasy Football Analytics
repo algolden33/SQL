@@ -1,0 +1,46 @@
+
+--THis code will output the Power Ranking of every single player based on 9 different analysts' rankings
+
+SELECT M.Name, 
+       COALESCE(M.Rank, 0) AS M_Rank, 
+       COALESCE(C.Rank, 0) AS C_Rank, 
+       COALESCE(F.Andy, 0) AS F_Andy, 
+       COALESCE(F.Jason, 0) AS F_Jason, 
+       COALESCE(F.Mike, 0) AS F_Mike, 
+       COALESCE(Y.ScottPianowski, 0) AS Y_ScottPianowski, 
+       COALESCE(Y.DaltonDelDon, 0) AS Y_DaltonDelDon, 
+       COALESCE(Y.KateMagdziuk, 0) AS Y_KateMagdziuk, 
+       COALESCE(Y.TeraRoberts, 0) AS Y_TeraRoberts,
+       ROUND((COALESCE(M.Rank, 0) + COALESCE(C.Rank, 0) + COALESCE(F.Andy, 0) + COALESCE(F.Jason, 0) + COALESCE(F.Mike, 0) + COALESCE(Y.ScottPianowski, 0) + COALESCE(Y.DaltonDelDon, 0) + COALESCE(Y.KateMagdziuk, 0) + COALESCE(Y.TeraRoberts, 0)), 2) AS Total,
+       -- Calculate the count of non-zero values in each row
+       (CASE WHEN COALESCE(M.Rank, 0) != 0 THEN 1 ELSE 0 END +
+        CASE WHEN COALESCE(C.Rank, 0) != 0 THEN 1 ELSE 0 END +
+        CASE WHEN COALESCE(F.Andy, 0) != 0 THEN 1 ELSE 0 END +
+        CASE WHEN COALESCE(F.Jason, 0) != 0 THEN 1 ELSE 0 END +
+        CASE WHEN COALESCE(F.Mike, 0) != 0 THEN 1 ELSE 0 END +
+        CASE WHEN COALESCE(Y.ScottPianowski, 0) != 0 THEN 1 ELSE 0 END +
+        CASE WHEN COALESCE(Y.DaltonDelDon, 0) != 0 THEN 1 ELSE 0 END +
+        CASE WHEN COALESCE(Y.KateMagdziuk, 0) != 0 THEN 1 ELSE 0 END +
+        CASE WHEN COALESCE(Y.TeraRoberts, 0) != 0 THEN 1 ELSE 0 END) AS NonZeroCount,
+       -- Calculate Power Ranking by dividing Total by NonZeroCount
+       ROUND(
+           ROUND((COALESCE(M.Rank, 0) + COALESCE(C.Rank, 0) + COALESCE(F.Andy, 0) + COALESCE(F.Jason, 0) + COALESCE(F.Mike, 0) + COALESCE(Y.ScottPianowski, 0) + COALESCE(Y.DaltonDelDon, 0) + COALESCE(Y.KateMagdziuk, 0) + COALESCE(Y.TeraRoberts, 0)), 2) / 
+           (CASE WHEN COALESCE(M.Rank, 0) != 0 THEN 1 ELSE 0 END +
+            CASE WHEN COALESCE(C.Rank, 0) != 0 THEN 1 ELSE 0 END +
+            CASE WHEN COALESCE(F.Andy, 0) != 0 THEN 1 ELSE 0 END +
+            CASE WHEN COALESCE(F.Jason, 0) != 0 THEN 1 ELSE 0 END +
+            CASE WHEN COALESCE(F.Mike, 0) != 0 THEN 1 ELSE 0 END +
+            CASE WHEN COALESCE(Y.ScottPianowski, 0) != 0 THEN 1 ELSE 0 END +
+            CASE WHEN COALESCE(Y.DaltonDelDon, 0) != 0 THEN 1 ELSE 0 END +
+            CASE WHEN COALESCE(Y.KateMagdziuk, 0) != 0 THEN 1 ELSE 0 END +
+            CASE WHEN COALESCE(Y.TeraRoberts, 0) != 0 THEN 1 ELSE 0 END), 2) AS Power_Ranking
+FROM Mattberry AS M
+LEFT JOIN MikeClay AS C ON M.Name = C.Name
+LEFT JOIN FantasyFootballers AS F ON M.Name = F.Name
+LEFT JOIN Yahoo AS Y ON M.Name = Y.Name
+GROUP BY M.Name
+HAVING Total != 0  
+ORDER BY Power_Ranking ASC;
+
+
+
