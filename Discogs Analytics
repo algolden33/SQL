@@ -13,7 +13,7 @@ Number of Ratings: The total number of ratings the record has received.
 Average Rating: The average rating out of all received ratings. 
 Price Statistics: This includes the lowest, median, and highest prices of the records.
 
---Get a fee for the data
+--Get a feel for the data
 SELECT *
 FROM Discogs
 Limit 5;
