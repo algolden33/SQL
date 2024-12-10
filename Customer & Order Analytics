@@ -29,9 +29,9 @@ SELECT product, min(price)
 FROM JanSales
 ;
 
-#5. What is the total revenue for each product sold in January?
+#5. What is the total revenue for each product sold in February?
 SELECT product, sum(Quantity)*price as revenue
-FROM JanSales
+FROM FebSales
 GROUP BY product
 ;
 
