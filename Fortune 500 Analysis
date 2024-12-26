@@ -122,3 +122,47 @@ ELSE 'abysmal' END 'mother friendly'
 FROM fortune_companies
 WHERE industry = 'Healthcare';
 
+
+# decided to come back to this project and did it again! New answers below:
+
+-- Group the data in a new way using a CASE Statement
+
+SELECT company_name, avg_employee_tenure,
+CASE WHEN avg_employee_tenure >=7 THEN "High Loyalty" 
+WHEN avg_employee_tenure >=-5 THEN "Regular Loyalty" 
+WHEN avg_employee_tenure >=-1 THEN "High Turnover" 
+ELSE "NA"
+END AS "Tenure"
+FROM fortune_companies;
+
+
+-- Group the data in a new way using a Having statement.
+
+SELECT industry, ROUND(AVG(revenue)) as average_revenue
+FROM fortune_companies
+GROUP BY industry
+HAVING average_revenue
+ORDER BY average_revenue desc;
+
+-- Use logical operators like AND or OR to filter the data in an interesting way.
+
+SELECT *
+FROM fortune_companies
+WHERE industry = 'Finance'
+AND revenue >200
+AND healthcare_benefits = 1
+ORDER BY revenue desc
+;
+
+-- Use an aggregate function like AVG, SUM, COUNT, MAX, and/or MIN to return summary statistics about the data.
+SELECT * 
+FROM fortune_companies
+Limit 5;
+
+SELECT industry, ROUND(AVG(maternity_leave_weeks)) as maternity
+FROM fortune_companies
+GROUP BY industry
+ORDER BY maternity desc
+;
+
+
