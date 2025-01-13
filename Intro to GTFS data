@@ -1,0 +1,40 @@
+select *
+from routes
+where route_short_name = '"139"'
+;
+
+select *
+from stop_times
+limit 20;
+
+
+select *
+from stops
+limit 20;
+
+select *, q.stop_name
+From stop_times
+INNER Join stops as q
+ON stop_times.stop_id = q.stop_id
+where trip_id = "9041";
+
+
+select *
+from stop_times
+where stop_id = "27427";
+
+select *
+FRom agency
+;
+
+select *
+from calendar_dates
+limit 200;
+
+SELECT trip_id, service_id, trip_headsign, direction_id
+FROM trips
+WHERE route_id IN (
+    SELECT route_id
+    FROM routes
+    WHERE route_short_name = '"139"'
+);
